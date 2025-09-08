@@ -48,10 +48,21 @@ erDiagram
         string file_url "成績表PDF"
     }
 
+    past_exam_results {
+        int id PK "過去問結果ID"
+        int student_id FK "生徒ID"
+        string school_name "学校名"
+        int year "年度"
+        int score "点数"
+        int pass_minimum_score "合格最低点"
+        int pass_average_score "合格者平均点"
+    }
+
     instructors ||--o{ student_instructors : "担当"
     students ||--o{ student_instructors : "担当"
     students ||--o{ schedules : "持つ"
     students ||--o{ grades : "持つ"
+    students ||--o{ past_exam_results : "持つ"
 
     student_instructors {
         int student_id PK, FK "生徒ID"
