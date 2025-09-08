@@ -9,6 +9,7 @@ erDiagram
         string name "講師名"
         string email "メールアドレス"
         string password_digest "パスワードハッシュ"
+        string role "役割"
         datetime created_at "作成日時"
         datetime updated_at "更新日時"
     }
@@ -79,4 +80,5 @@ erDiagram
         int student_id PK, FK "生徒ID"
         int instructor_id PK, FK "講師ID"
     }
+
 ```
