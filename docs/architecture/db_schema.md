@@ -16,17 +16,45 @@ erDiagram
     students {
         int id PK "生徒ID"
         string name "氏名"
-        string kana_name "ふりがな"
-        int grade "学年"
+        string parent_name "保護者氏名"
+        string address "住所"
+        string phone_number "連絡先"
+        string first_choice_school "第一志望校"
+        string second_choice_school "第二志望校"
+        string third_choice_school "第三志望校"
+        string cram_school_name "通塾先"
+        string cram_school_campus "校舎名"
+        text hobbies "習い事"
         datetime created_at "作成日時"
         datetime updated_at "更新日時"
     }
+
+    schedules {
+        int id PK "予定ID"
+        int student_id FK "生徒ID"
+        string title "タイトル"
+        string type "種別"
+        datetime start_time "開始日時"
+        datetime end_time "終了日時"
+    }
+
+    grades {
+        int id PK "成績ID"
+        int student_id FK "生徒ID"
+        string exam_name "模試・テスト名"
+        int score "点数"
+        float deviation "偏差値"
+        string judgment "志望校判定"
+        string file_url "成績表PDF"
+    }
+
+    instructors ||--o{ student_instructors : "担当"
+    students ||--o{ student_instructors : "担当"
+    students ||--o{ schedules : "持つ"
+    students ||--o{ grades : "持つ"
 
     student_instructors {
         int student_id PK, FK "生徒ID"
         int instructor_id PK, FK "講師ID"
     }
-
-    instructors ||--o{ student_instructors : "担当"
-    students ||--o{ student_instructors : "担当"
 ```
