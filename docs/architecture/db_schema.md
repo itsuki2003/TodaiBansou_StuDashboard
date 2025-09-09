@@ -45,7 +45,7 @@ erDiagram
         text social_advanced_study "社会：追加勉強リスト"
         text current_issues "現在の課題・弱点リスト"
         text life_issues "生活面の課題"
-        text todo_spreadsheet_url "やることリストURL"
+        text todo_spreadsheet_id "やることリストのシートID"
         datetime created_at "作成日時"
         datetime updated_at "更新日時"
     }
