@@ -16,8 +16,16 @@ erDiagram
 
     students {
         int id PK "生徒ID"
-        string name "氏名"
-        string parent_name "保護者氏名"
+        string last_name "姓"
+        string first_name "名"
+        string kana_last_name "セイ"
+        string kana_first_name "メイ"
+        string parent_last_name "保護者 姓"
+        string parent_first_name "保護者 名"
+        string parent_kana_last_name "保護者 セイ"
+        string parent_kana_first_name "保護者 メイ"
+        date birthday "誕生日"
+        int grade "学年"
         string address "住所"
         string phone_number "連絡先"
         string first_choice_school "第一志望校"
@@ -37,9 +45,9 @@ erDiagram
         text social_advanced_study "社会：追加勉強リスト"
         text current_issues "現在の課題・弱点リスト"
         text life_issues "生活面の課題"
+        text todo_spreadsheet_url "やることリストURL"
         datetime created_at "作成日時"
         datetime updated_at "更新日時"
-        text todo_spreadsheet_url "やることリストURL"
     }
 
     schedules {
