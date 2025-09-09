@@ -132,4 +132,18 @@ erDiagram
     students ||--o{ student_issues : "持つ"
     instructors ||--o{ student_issues : "作成"
     instructors ||--o{ password_reset_tokens : "発行"
+
+    audit_logs {
+    uuid id PK "ログID"
+    string table_name "テーブル名"
+    uuid record_id "レコードID"
+    string action "操作種別"
+    json old_values "変更前の値"
+    json new_values "変更後の値"
+    uuid changed_by FK "変更者ID"
+    datetime changed_at "変更日時"
+}
+
+instructors ||--o{ audit_logs : "実行"
+
 ```
