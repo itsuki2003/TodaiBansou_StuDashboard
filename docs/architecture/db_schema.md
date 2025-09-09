@@ -6,7 +6,10 @@
 erDiagram
     instructors {
         int id PK "講師ID"
-        string name "講師名"
+        string last_name "姓"
+        string first_name "名"
+        string kana_last_name "セイ"
+        string kana_first_name "メイ"
         string email "メールアドレス"
         string password_digest "パスワードハッシュ"
         string role "役割"
@@ -20,34 +23,49 @@ erDiagram
         string first_name "名"
         string kana_last_name "セイ"
         string kana_first_name "メイ"
-        string parent_last_name "保護者 姓"
-        string parent_first_name "保護者 名"
-        string parent_kana_last_name "保護者 セイ"
-        string parent_kana_first_name "保護者 メイ"
         date birthday "誕生日"
         int grade "学年"
-        string address "住所"
-        string phone_number "連絡先"
         string first_choice_school "第一志望校"
         string second_choice_school "第二志望校"
         string third_choice_school "第三志望校"
         string cram_school_name "通塾先"
         string cram_school_campus "校舎名"
         text hobbies "習い事"
-        text parent_concerns "保護者からの相談事項"
-        text math_basic_study "算数：基本勉強リスト"
-        text math_advanced_study "算数：追加勉強リスト"
-        text japanese_basic_study "国語：基本勉強リスト"
-        text japanese_advanced_study "国語：追加勉強リスト"
-        text science_basic_study "理科：基本勉強リスト"
-        text science_advanced_study "理科：追加勉強リスト"
-        text social_basic_study "社会：基本勉強リスト"
-        text social_advanced_study "社会：追加勉強リスト"
-        text current_issues "現在の課題・弱点リスト"
-        text life_issues "生活面の課題"
-        text todo_spreadsheet_id "やることリストのシートID"
+        string todo_spreadsheet_id "やることリストのシートID"
         datetime created_at "作成日時"
         datetime updated_at "更新日時"
+    }
+
+    guardians {
+        int id PK "保護者ID"
+        int student_id FK "生徒ID"
+        string relationship "続柄"
+        string last_name "姓"
+        string first_name "名"
+        string kana_last_name "セイ"
+        string kana_first_name "メイ"
+    }
+
+    contacts {
+        int id PK "連絡先ID"
+        string contactable_type "所有者タイプ"
+        int contactable_id "所有者ID"
+        string contact_type "連絡先種別"
+        string value "連絡先情報"
+        boolean is_primary "プライマリフラグ"
+    }
+
+    student_instructors {
+        int student_id PK, FK "生徒ID"
+        int instructor_id PK, FK "講師ID"
+    }
+
+    password_reset_tokens {
+        int id PK "トークンID"
+        int instructor_id FK "講師ID"
+        string token UK "リセットトークン"
+        datetime expires_at "有効期限"
+        boolean used "使用済みフラグ"
     }
 
     schedules {
@@ -59,35 +77,59 @@ erDiagram
         datetime end_time "終了日時"
     }
 
-    grades {
-        int id PK "成績ID"
-        int student_id FK "生徒ID"
-        string exam_name "模試・テスト名"
-        int score "点数"
-        float deviation "偏差値"
-        string judgment "志望校判定"
-        string file_url "成績表PDF"
+    exam_types {
+        int id PK "模試マスタID"
+        string name "模試名"
+        string provider "主催団体"
     }
 
-    past_exam_results {
-        int id PK "過去問結果ID"
+    grades {
+        int id PK "成績ヘッダID"
         int student_id FK "生徒ID"
-        string school_name "学校名"
-        int year "年度"
+        int exam_type_id FK "模試マスタID"
+        date exam_date "受験日"
+    }
+
+    grade_details {
+        int id PK "成績詳細ID"
+        int grade_id FK "成績ヘッダID"
+        string subject "科目"
         int score "点数"
-        int pass_minimum_score "合格最低点"
-        int pass_average_score "合格者平均点"
+        float deviation "偏差値"
+    }
+
+    study_plans {
+        int id PK "学習計画ID"
+        int student_id FK "生徒ID"
+        string subject "科目"
+        string plan_type "計画種別"
+        text content "内容"
+        datetime created_at "作成日時"
+        datetime updated_at "更新日時"
+    }
+
+    student_issues {
+        int id PK "課題ID"
+        int student_id FK "生徒ID"
+        string issue_type "課題種別"
+        string subject "科目"
+        text description "内容"
+        string status "ステータス"
+        int created_by FK "作成者講師ID"
+        datetime created_at "作成日時"
     }
 
     instructors ||--o{ student_instructors : "担当"
     students ||--o{ student_instructors : "担当"
+    students ||--o{ guardians : "持つ"
+    students ||--o{ contacts : "持つ"
+    guardians ||--o{ contacts : "持つ"
     students ||--o{ schedules : "持つ"
     students ||--o{ grades : "持つ"
-    students ||--o{ past_exam_results : "持つ"
-
-    student_instructors {
-        int student_id PK, FK "生徒ID"
-        int instructor_id PK, FK "講師ID"
-    }
-
+    exam_types ||--o{ grades : "分類"
+    grades ||--o{ grade_details : "詳細"
+    students ||--o{ study_plans : "持つ"
+    students ||--o{ student_issues : "持つ"
+    instructors ||--o{ student_issues : "作成"
+    instructors ||--o{ password_reset_tokens : "発行"
 ```
