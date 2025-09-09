@@ -1,30 +1,30 @@
-# TodaiBansou_StuDashboard
+## 💻 使用技術スタック
 
-オンライン家庭教師事業向けの生徒管理ダッシュボード
+### フロントエンド
 
-## 💻 使用技術スタック（予定）
+- **フレームワーク: Next.js**
+- **言語: TypeScript**
+- **UI コンポーネント: Material-UI (MUI) or Chakra UI**
+- **状態管理:** SWR (or React Query), Zustand
+- **フォーム管理:** React Hook Form
 
-- **フロントエンド:** Next.js (TypeScript)
-- **バックエンド:** (未定: Ruby on Rails, NestJS など)
-- **データベース:** PostgreSQL
-- **インフラ:** AWS (EC2, RDS, S3)
-- **CI/CD:** GitHub Actions
+### バックエンド
 
-## 🚀 開発の始め方
+- **フレームワーク: NestJS**
+- **言語: TypeScript**
+- **データベース ORM: Prisma**
 
-1. このリポジトリをクローンします。
-   ```
-   git clone [https://github.com/itsuki2003/TodaiBansou_StuDashboard.git](https://github.com/itsuki2003/TodaiBansou_StuDashboard.git)
-   ```
-2. 必要なツールをインストールします。（後日追記）
+### データベース
 
-# 例: npm install
+- **PostgreSQL**
 
-3. 開発サーバーを起動します。（後日追記）
+### インフラ
 
-# 例: npm run dev
+- **フロントエンドホスティング: Vercel**
+- **バックエンドホスティング: AWS Fargate (ECS)**
+- **データベース: AWS RDS for PostgreSQL**
+- **ファイルストレージ: AWS S3**
 
-📚 ドキュメント
-プロジェクトの設計と思想に関するドキュメントは docs ディレクトリにあります。
-機能要件: /docs/requirements
-DB 設計: /docs/architecture/db_schema.md
+### CI/CD
+
+- **GitHub Actions**
