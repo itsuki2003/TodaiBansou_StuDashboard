@@ -39,6 +39,7 @@ erDiagram
         text life_issues "生活面の課題"
         datetime created_at "作成日時"
         datetime updated_at "更新日時"
+        text todo_spreadsheet_url "やることリストURL"
     }
 
     schedules {
