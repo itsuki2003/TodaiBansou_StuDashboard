@@ -19,6 +19,7 @@
 - **利用カラム:**
   - `email`: ログイン ID として利用。一意（ユニーク）である必要がある。
   - `password_digest`: ハッシュ化されたパスワードを保存。
+  - `supabase_uid`: Supabase Auth の UID を保存。`instructors.id` は内部で配布される ID であり、RLS ポリシーはこの `supabase_uid` を参照する。
 
 ### 3. 詳細機能仕様
 
