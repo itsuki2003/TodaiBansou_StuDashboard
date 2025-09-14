@@ -15,3 +15,8 @@
 | 担当生徒の予定登録・編集   |     ✅      |  ✅   |     ✅     |
 
 _(✅: 可能, -: 不可)_
+
+## 補足
+
+- `instructors.id` はシステム内部で利用する講師 ID。
+- Supabase Auth の UID は `instructors.supabase_uid` に保存され、RLS ポリシーではこの `supabase_uid` を参照する。

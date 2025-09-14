@@ -4,6 +4,8 @@
 
 全てのテーブルに対して、デフォルトで RLS を有効にする。これにより、ポリシーで明示的に許可しない限り、全てのデータアクセスは拒否される。
 
+`instructors` テーブルではシステム内部で利用する `id` と、Supabase Auth の UID を保存する `supabase_uid` を分けて管理する。RLS ポリシーでは `auth.uid()` と `supabase_uid` を比較して権限を判定する。
+
 ### RLS の基本方針
 
 - **`SELECT` (閲覧):** 講師は担当生徒の情報のみ、管理者は全情報を閲覧できる。
@@ -20,11 +22,23 @@
 ```sql
 -- 管理者（Admin, SystemAdmin）は全生徒を閲覧・操作できる
 CREATE POLICY "admins_full_access_on_students" ON students FOR ALL
-USING (EXISTS (SELECT 1 FROM instructors WHERE id = auth.uid() AND role IN ('Admin', 'SystemAdmin')));
+USING (
+  EXISTS (
+    SELECT 1 FROM instructors
+    WHERE supabase_uid = auth.uid() AND role IN ('Admin', 'SystemAdmin')
+  )
+);
 
 -- 講師（Instructor）は担当生徒のみを閲覧できる
 CREATE POLICY "instructors_select_assigned_students" ON students FOR SELECT
-USING (auth.uid() IN (SELECT instructor_id FROM student_instructors WHERE student_id = students.id));
+USING (
+  auth.uid() IN (
+    SELECT supabase_uid FROM instructors
+    WHERE id IN (
+      SELECT instructor_id FROM student_instructors WHERE student_id = students.id
+    )
+  )
+);
 ```
 
 #### `schedules` テーブル
@@ -32,14 +46,21 @@ USING (auth.uid() IN (SELECT instructor_id FROM student_instructors WHERE studen
 ```sql
 -- 管理者は全スケジュールを操作できる
 CREATE POLICY "admins_full_access_on_schedules" ON schedules FOR ALL
-USING (EXISTS (SELECT 1 FROM instructors WHERE id = auth.uid() AND role IN ('Admin', 'SystemAdmin')));
+USING (
+  EXISTS (
+    SELECT 1 FROM instructors
+    WHERE supabase_uid = auth.uid() AND role IN ('Admin', 'SystemAdmin')
+  )
+);
 
 -- 講師は担当生徒のスケジュールのみを閲覧・操作できる
 CREATE POLICY "instructors_access_assigned_schedules" ON schedules FOR ALL
 USING (
-  students.id IN (
+  schedules.student_id IN (
     SELECT student_id FROM student_instructors
-    WHERE instructor_id = auth.uid()
+    WHERE instructor_id IN (
+      SELECT id FROM instructors WHERE supabase_uid = auth.uid()
+    )
   )
 );
 ```
